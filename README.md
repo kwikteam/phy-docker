@@ -1,2 +1,11 @@
 # phy-docker
-Docker file for the phy library
+
+Use this Dockerfile to create a docker image with phy and all of its dependencies.
+
+## Instructions
+
+* Install Docker
+*
+
+
+
