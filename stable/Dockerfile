@@ -1,30 +1,19 @@
 FROM ubuntu:latest
 MAINTAINER Cyrille Rossant "cyrille.rossant@gmail.com"
 
-# NOTE: mesa-utils should not be needed when using remote backends,
-# see https://github.com/vispy/vispy/issues/929
 RUN apt-get update && apt-get install -y wget git fontconfig mesa-utils
-RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
-    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /miniconda.sh && \
-    /bin/bash /miniconda.sh -b -p /opt/conda && \
-    rm miniconda.sh && \
-    /opt/conda/bin/conda install --yes \
-    conda \
-    python=3 \
-    pip \
-    numpy \
-    scipy \
-    matplotlib \
-    h5py \
-    ipython-notebook \
-    requests \
+# Install miniconda and phy.
+RUN wget -qO- https://raw.githubusercontent.com/kwikteam/phy-install/master/latest.sh | bash
+# Install test dependencies.
+RUN $HOME/miniconda/bin/conda install --yes \
     pytest \
     flake8 \
+    requests \
     fontconfig
-ENV PATH /opt/conda/bin:$PATH
-RUN pip install --upgrade \
+RUN $HOME/miniconda/bin/pip install --upgrade \
     pip \
-    responses \
-    vispy \
-    phy
-WORKDIR /home
+    responses
+ENV PATH=$HOME/miniconda/bin:$PATH
+# Run tests.
+RUN $HOME/miniconda/bin/py.test $HOME/miniconda/lib/python3.4/site-packages/phy/ -m "not long"
+WORKDIR $HOME
