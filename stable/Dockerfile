@@ -20,5 +20,9 @@ RUN echo 'export PATH=/opt/conda/bin:$PATH' > /etc/profile.d/conda.sh && \
     flake8 \
     fontconfig
 ENV PATH /opt/conda/bin:$PATH
-RUN pip install responses vispy phy
+RUN pip install --upgrade \
+    pip \
+    responses \
+    vispy \
+    phy
 WORKDIR /home
